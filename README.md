@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-In this project I created a machine learning model that can predict breast cancer diagnoses, with a classification algorithm. I also performed a clustering algorithm. The motivation for this project was my own experience as a cancer patient, and my determination to help other people.
+In this notebook I created a machine learning model that can predict breast cancer diagnoses, with a classification algorithm. I also performed a clustering algorithm. The motivation for this project was my own experience as a cancer patient, and my determination to help other people.
 
 ## Data Description
 
