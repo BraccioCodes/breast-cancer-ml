@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-In this project I created a machine learning model that can predict breast cancer diagnoses. The motivation for this project was my own experience as a cancer patient, and my determination to help other people.
+In this project I created a machine learning model that can predict breast cancer diagnoses, with a classification algorithm. I also performed a clustering algorithm. The motivation for this project was my own experience as a cancer patient, and my determination to help other people.
 
 ## Data Description
 
@@ -32,23 +32,37 @@ These features will be use to create our classification algorithm .
 
 ## EDA and Preprocessing
 
-I checked for missing and duplicate values, which fortunately there were none. I also checked for outliers, but due to the nature of our data decided to keep them since they could be crucial for extraordinary cases.
+I checked for missing and duplicate values, which fortunately there were none. I also checked for outliers, but due to the nature of our data decided to keep them since they could be crucial for extraordinary cases. I created a bar plot to check if there was a class imbalance for the target variable.
 
+![Diagnosis](diagnosis.png)
 
+Our dataset is fairly imbalanced, with more instances belonging to the benign class.
 
-![Bar1](bar1.png)
+I also chose to perform binary encoding for the target variable, and scaled the measurements using the RobustScaler from Scikit-learn since this scaler tackles the biases rooting from outliers.
 
-While the average work life balance rating doesn't really change much between region, there is a very slight difference between each work location, with Onsite jobs being on average the work location with the lowest average work life balance rating (2.95).
+## Model Implementation & Evaluation
 
+To prevent feature redundancy, I picked the mean measurement for each of the characteristics. 
 
-![Bar2](bar2.png)
+**Unsupervised Learning: K-Means Clustering**
 
-Stress level remains kind of the same between all the industries in the dataset, although the education and the healthcare industries both have a higher average stress level reported between employees (2.05, 2.04, respectively).
+I created a k-means clustering model where k=2 to see if the features can naturally separate malignant and benign tumors into distinct groups. After that I applied PCA for visualization purposes. 
 
+![Clustering](clustering.png)
 
+The silhouette score for this was 0.40. Not great, and it can definitely be improved, but now we move onto actual classification.
 
-**Correlation Analysis**
+**Supervised Learning: Logistic Regression**
 
-![lineplot](lineplot.png)
+I decided to do some more feature engineering so I ran a correlation analysis of all the mean features with our target variable, diagnosis.
 
-To see how weekly worked hours affect stress levels among employees, I used this lineplot. There's clearly no correlation between the two variables, as there isn't a trend happening when weekly worked hours increase.
+![Corrmatrix](corrmatrix.png)
+
+I dropped all the features that had less than a 50% correlation with diagnosis, so we end up with radius, perimeter, area, compactness, concavity, and concave points.
+
+After training and testing the logistic regression model, I got a ROC AUC score of 99%, and an accuracy of 89%. However, the recall for malignant cases was only 81%. I adjusted the probability threshold to prioritize recall, since in medical diagnoses we want the minimum number of false negatives. 
+
+With our adjusted threshold, our accuracy improved to 96%, and our recall for malignant cases to 98%. To visualize this, I created a heatmap of a confusion matrix for the testing set, and I also plotted the ROC Curve.
+
+![Confmatrix](confmatrix.png)
+![Roccurve](roccurve.png)
